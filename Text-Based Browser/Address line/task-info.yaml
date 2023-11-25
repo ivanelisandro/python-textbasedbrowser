@@ -85,9 +85,12 @@ files:
   - name: Stage1.md
     visible: true
     learner_created: true
+  - name: Stage2.md
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7210#comment
 status: Solved
 feedback:
   message: Congratulations!
   time: "Fri, 24 Nov 2023 17:11:20 UTC"
-record: -1
+record: 1

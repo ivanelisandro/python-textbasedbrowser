@@ -166,6 +166,38 @@ files:
       
       if __name__ == '__main__':    TextBasedBrowserTest().run_tests()
     learner_created: false
+  - name: Stage1.md
+    visible: true
+    text: |
+      # Stage 1:
+      
+      Focus on stage 1 is just receiving an url as input and returning a text.
+      Only two urls will be considered valid.
+      If the user types `exit`, finish the program.
+      
+      ## Valid urls:
+      
+      - bloomberg.com: should print bloomberg_com variable value;
+      
+      - nytimes.com: should print nytimes_com variable value.
+    learner_created: true
+  - name: Stage2.md
+    visible: true
+    text: "# Stage 2:\n\nRequirements:\n\n- Accept 1 directory name as argument;\n\n\
+    - Once url has been accessed, save it to file in the directory;\n\n- When using\
+    \ \nOnce the URL has been\nIf the user types `exit`, finish the program.\n\n##\
+    \ Valid urls:\n\n- bloomberg.com: should print bloomberg_com variable value;\n\
+    \n- nytimes.com: should print nytimes_com variable value.\n"
+    learner_created: true
+  - name: files_processor.py
+    visible: true
+    learner_created: true
+  - name: myfiles/bloomberg
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7211#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Sat, 25 Nov 2023 01:17:48 UTC"
 record: -1
