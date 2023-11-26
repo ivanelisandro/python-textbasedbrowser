@@ -201,6 +201,70 @@ files:
       
       if __name__ == '__main__':    TextBasedBrowserTest().run_tests()
     learner_created: false
+  - name: files_processor.py
+    visible: true
+    text: |-
+      import os
+      
+      
+      class StoragePath:
+          @staticmethod
+          def validate(path):
+              if not os.access(path, os.F_OK):
+                  os.makedirs(path, os.W_OK)
+              return os.access(path, os.W_OK)
+      
+      
+      class TabsProvider:
+          def __init__(self, directory):
+              self.directory = directory
+      
+          def store(self, name, content):
+              with open(self.format_path(name), "w", encoding='utf-8') as tab:
+                  tab.write(content)
+      
+          def load_local(self, name):
+              with open(self.format_path(name), "r", encoding='utf-8') as tab:
+                  return tab.read()
+      
+          def is_stored(self, name):
+              return os.access(self.format_path(name), os.R_OK)
+      
+          def format_path(self, name):
+              return os.path.join(self.directory, name)
+    learner_created: true
+  - name: Stage1.md
+    visible: true
+    text: |
+      # Stage 1:
+      
+      Focus on stage 1 is just receiving an url as input and returning a text.
+      Only two urls will be considered valid.
+      If the user types `exit`, finish the program.
+      
+      ## Valid urls:
+      
+      - bloomberg.com: should print bloomberg_com variable value;
+      
+      - nytimes.com: should print nytimes_com variable value.
+    learner_created: true
+  - name: Stage2.md
+    visible: true
+    text: |
+      # Stage 2:
+      
+      Requirements:
+      
+      - Accept 1 directory name as argument;
+      
+      - Once url has been accessed, save it to file in the directory;
+      
+      - When receiving a shortened request, the program should retrieve information from the file if it is available.
+      
+      - The stage describes some error messages that must be shown for invalid inputs;
+      
+      - Previous behaviour for exiting continues to exist;
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7212#comment
 status: Unchecked
 record: -1

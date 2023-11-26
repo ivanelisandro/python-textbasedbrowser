@@ -1,0 +1,19 @@
+type: code
+files:
+  - name: main.py
+    visible: true
+    text: |-
+      from collections import deque
+      
+      # please don't change the following line
+      candy_bag = deque(input().split())
+      
+      # your code here
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/14590#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 26 Nov 2023 19:40:40 UTC"
+record: -1
+submission_language: python3

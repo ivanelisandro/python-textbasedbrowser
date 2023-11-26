@@ -12,4 +12,5 @@ programming_language: Python
 environment: unittest
 content:
   - Text-Based Browser
+  - Topics
 mode: Study
