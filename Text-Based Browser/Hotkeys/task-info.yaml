@@ -201,38 +201,6 @@ files:
       
       if __name__ == '__main__':    TextBasedBrowserTest().run_tests()
     learner_created: false
-  - name: files_processor.py
-    visible: true
-    text: |-
-      import os
-      
-      
-      class StoragePath:
-          @staticmethod
-          def validate(path):
-              if not os.access(path, os.F_OK):
-                  os.makedirs(path, os.W_OK)
-              return os.access(path, os.W_OK)
-      
-      
-      class TabsProvider:
-          def __init__(self, directory):
-              self.directory = directory
-      
-          def store(self, name, content):
-              with open(self.format_path(name), "w", encoding='utf-8') as tab:
-                  tab.write(content)
-      
-          def load_local(self, name):
-              with open(self.format_path(name), "r", encoding='utf-8') as tab:
-                  return tab.read()
-      
-          def is_stored(self, name):
-              return os.access(self.format_path(name), os.R_OK)
-      
-          def format_path(self, name):
-              return os.path.join(self.directory, name)
-    learner_created: true
   - name: Stage1.md
     visible: true
     text: |
@@ -265,6 +233,50 @@ files:
       
       - Previous behaviour for exiting continues to exist;
     learner_created: true
+  - name: Stage3.md
+    visible: true
+    learner_created: true
+  - name: navigation.py
+    visible: true
+    learner_created: true
+  - name: startup.py
+    visible: true
+    learner_created: true
+  - name: storage.py
+    visible: true
+    text: |-
+      import os
+      
+      
+      class StoragePath:
+          @staticmethod
+          def validate(path):
+              if not os.access(path, os.F_OK):
+                  os.makedirs(path, os.W_OK)
+              return os.access(path, os.W_OK)
+      
+      
+      class TabsProvider:
+          def __init__(self, directory):
+              self.directory = directory
+      
+          def store(self, name, content):
+              with open(self.format_path(name), "w", encoding='utf-8') as tab:
+                  tab.write(content)
+      
+          def load_local(self, name):
+              with open(self.format_path(name), "r", encoding='utf-8') as tab:
+                  return tab.read()
+      
+          def is_stored(self, name):
+              return os.access(self.format_path(name), os.R_OK)
+      
+          def format_path(self, name):
+              return os.path.join(self.directory, name)
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7212#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 27 Nov 2023 02:26:15 UTC"
 record: -1

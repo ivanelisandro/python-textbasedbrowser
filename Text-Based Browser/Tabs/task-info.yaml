@@ -189,7 +189,7 @@ files:
     \ Valid urls:\n\n- bloomberg.com: should print bloomberg_com variable value;\n\
     \n- nytimes.com: should print nytimes_com variable value.\n"
     learner_created: true
-  - name: files_processor.py
+  - name: storage.py
     visible: true
     learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7211#comment
