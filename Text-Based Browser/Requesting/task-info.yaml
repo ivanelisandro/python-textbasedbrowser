@@ -190,6 +190,276 @@ files:
       
       if __name__ == '__main__':    TextBasedBrowserTest().run_tests()
     learner_created: false
+  - name: startup.py
+    visible: true
+    text: |
+      import os
+      
+      
+      class Arguments:
+          """
+          Simple class for storing arguments processing rules and values.
+          """
+          minimum = 2
+          local_path = None
+      
+      
+      class Startup:
+          """
+          Simplest possible interface to handle startup routines.
+          Processes the local storage path for later retrieval.
+          """
+      
+          @staticmethod
+          def get_path():
+              """
+              Retrieves the local storage path processed from the
+              startup arguments.
+              """
+              return Arguments.local_path
+      
+          @staticmethod
+          def can_run(arguments):
+              """
+              Provides startup validation.
+              returns True if it can successfully process all startup arguments
+              and create the directory for local files, False otherwise.
+      
+              Once finished, the path can be retrieved from get_path() method.
+              """
+              if len(arguments) < Arguments.minimum:
+                  return False
+      
+              Arguments.local_path = arguments[1]
+      
+              if not os.access(Arguments.local_path, os.F_OK):
+                  os.makedirs(Arguments.local_path, os.W_OK)
+              return os.access(Arguments.local_path, os.W_OK)
+    learner_created: true
+  - name: storage.py
+    visible: true
+    text: |
+      import os
+      
+      
+      class LocalStorage:
+          """
+          Handles local storage requirements, storing previously
+          navigated web-site content as text accessible from files.
+          """
+      
+          def __init__(self, directory):
+              self.directory = directory
+      
+          def store(self, name, content):
+              """
+              Stores the given content to a file with the given name
+              in the local storage directory.
+              """
+              with open(self.format_path(name), "w", encoding='utf-8') as tab:
+                  tab.write(content)
+      
+          def load_local(self, name):
+              """
+              Retrieves the content of a file with the given name
+              from the local storage directory.
+              """
+              with open(self.format_path(name), "r", encoding='utf-8') as tab:
+                  return tab.read()
+      
+          def exists(self, name):
+              """
+              Validates if a file with the given name exists in the
+              local storage directory with reading permissions.
+      
+              Returns False if the file does not exist or if it cannot
+              be read.
+              """
+              return os.access(self.format_path(name), os.R_OK)
+      
+          def format_path(self, name):
+              """
+              Formats the file name into a full file path using the
+              local storage directory.
+              """
+              return os.path.join(self.directory, name)
+    learner_created: true
+  - name: Stage1.md
+    visible: true
+    text: |
+      # Stage 1:
+      
+      Focus on stage 1 is just receiving an url as input and returning a text.
+      Only two urls will be considered valid.
+      If the user types `exit`, finish the program.
+      
+      ## Valid urls:
+      
+      - bloomberg.com: should print bloomberg_com variable value;
+      
+      - nytimes.com: should print nytimes_com variable value.
+    learner_created: true
+  - name: navigation.py
+    visible: true
+    text: |
+      from collections import deque
+      from dataclasses import dataclass
+      from storage import LocalStorage
+      import re
+      
+      
+      @dataclass
+      class Page:
+          """
+          Data class to represent the information of a webpage.
+          """
+          url: str
+          shortcut: str
+          content: str
+          is_valid: bool
+      
+      
+      class ContentManager:
+          """
+          Class to provide routines for retrieving and processing
+          contents in the form of a Page
+          """
+          url_pattern = r"(\w+)\."
+      
+          def __init__(self, path, urls):
+              self.storage = LocalStorage(path)
+              self.urls = urls
+      
+          def get(self, url) -> Page:
+              """
+              Gets the content for the given url as a Page.
+              Invalid url format will return an error message Page.
+              """
+              if self.storage.exists(url):
+                  return Page("", url, self.storage.load_local(url), True)
+      
+              if re.match(self.url_pattern, url) and url in self.urls:
+                  name, content = self.process(url)
+                  return Page(url, name, content, True)
+      
+              return Page(url, "", "Invalid URL", False)
+      
+          def process(self, url):
+              """
+              Process the content for a previously unknown url.
+              It will add the content to the local storage.
+              """
+              content = self.urls[url]
+              name = re.match(self.url_pattern, url).group(1)
+              self.storage.store(name, content)
+              return name, content
+      
+      
+      class Navigation:
+          """
+          Class to handle navigation history.
+          """
+      
+          def __init__(self):
+              self.history = deque()
+      
+          def add_history(self, command):
+              """
+              Adds the specified command to the history stack.
+              """
+              if command:
+                  self.history.append(command[:])
+      
+          def get_previous(self):
+              """
+              Retrieves the previous state in the history stack,
+              removing it from the stack.
+              """
+              if self.history:
+                  return self.history.pop()
+              return None
+      
+      
+      class TabsProvider:
+          """
+          Provides tab-like navigation routines to a text-based browser.
+          """
+          url_pattern = r"(\w+)\."
+      
+          def __init__(self, path, urls):
+              self.current_page = None
+              self.navigation = Navigation()
+              self.contents = ContentManager(path, urls)
+      
+          def navigate(self, command):
+              """
+              Processes the navigation command.
+              When 'back' is used, returns to the previous page.
+              Otherwise, shows to content for the command.
+              """
+              if command == 'back':
+                  self.go_back()
+                  return
+              self.show(command)
+      
+          def go_back(self):
+              """
+              Goes back to the previous state if it exists,
+              otherwise does nothing.
+              """
+              if command := self.navigation.get_previous():
+                  self.show(command)
+      
+          def show(self, command):
+              """
+              Prints the page content based on a command or url.
+              If the page is valid, adds it to history for future
+              backwards navigation.
+              """
+              page = self.contents.get(command)
+              print(page.content)
+              if page.is_valid:
+                  self.navigation.add_history(self.current_page)
+                  self.current_page = page.shortcut
+    learner_created: true
+  - name: Stage2.md
+    visible: true
+    text: |
+      # Stage 2:
+      
+      Requirements:
+      
+      - Accept 1 directory name as argument;
+      
+      - Once url has been accessed, save it to file in the directory;
+      
+      - When receiving a shortened request, the program should retrieve information from the file if it is available;
+      
+      - The stage describes some error messages that must be shown for invalid inputs;
+      
+      - Previous behaviour for exiting continues to exist;
+    learner_created: true
+  - name: Stage3.md
+    visible: true
+    text: |
+      # Stage 3:
+      
+      Requirements:
+      
+      - Implement a navigation system with the usage of the `back` command;
+      
+      - Navigation should use a `stack`;
+      
+      - Current page should not be present in the stack;
+      
+      - Previous behaviour continues the same;
+    learner_created: true
+  - name: Stage4.md
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7213#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Tue, 28 Nov 2023 03:23:40 UTC"
 record: -1

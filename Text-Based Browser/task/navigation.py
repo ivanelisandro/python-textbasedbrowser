@@ -2,6 +2,7 @@ from collections import deque
 from dataclasses import dataclass
 from storage import LocalStorage
 import re
+import requests
 
 
 @dataclass
@@ -20,11 +21,12 @@ class ContentManager:
     Class to provide routines for retrieving and processing
     contents in the form of a Page
     """
-    url_pattern = r"(\w+)\."
+    https_pattern = r"https?:\/\/"
+    url_pattern = r"(https?:\/\/)?(\w+)\."
+    name_pattern = r"(https:\/\/)(\w+)\."
 
-    def __init__(self, path, urls):
+    def __init__(self, path):
         self.storage = LocalStorage(path)
-        self.urls = urls
 
     def get(self, url) -> Page:
         """
@@ -34,7 +36,7 @@ class ContentManager:
         if self.storage.exists(url):
             return Page("", url, self.storage.load_local(url), True)
 
-        if re.match(self.url_pattern, url) and url in self.urls:
+        if re.match(self.url_pattern, url):
             name, content = self.process(url)
             return Page(url, name, content, True)
 
@@ -45,10 +47,15 @@ class ContentManager:
         Process the content for a previously unknown url.
         It will add the content to the local storage.
         """
-        content = self.urls[url]
-        name = re.match(self.url_pattern, url).group(1)
-        self.storage.store(name, content)
-        return name, content
+        if not re.match(self.https_pattern, url):
+            url = f"https://{url}"
+        response = requests.get(url)
+        if response:
+            content = response.text
+            name = re.match(self.name_pattern, url).group(2)
+            self.storage.store(name, content)
+            return name, content
+        return None, None
 
 
 class Navigation:
@@ -82,10 +89,10 @@ class TabsProvider:
     """
     url_pattern = r"(\w+)\."
 
-    def __init__(self, path, urls):
+    def __init__(self, path):
         self.current_page = None
         self.navigation = Navigation()
-        self.contents = ContentManager(path, urls)
+        self.contents = ContentManager(path)
 
     def navigate(self, command):
         """
