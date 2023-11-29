@@ -1,0 +1,29 @@
+type: matching
+captions:
+  - <code>.children</code>
+  - <code>.parent</code>
+  - <code>.contents</code>
+  - <code>.siblings</code>
+  - <code>.text</code>
+options:
+  - Shows the tag inside which is the one you're searching for
+  - Returns the tag(s) that are placed in the searched tag as a list
+  - Shows the tag(s) that are placed on the same level as the searched tag
+  - Shows the tag(s) that are placed in the searched tag
+  - Extracts the text contained in tags.
+files:
+  - name: main.py
+    visible: true
+    text: |+
+      #  You can experiment here, it won’t be checked
+    
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/22844#comment
+status: Solved
+record: -1
+ordering:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
