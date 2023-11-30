@@ -493,6 +493,21 @@ files:
       
       - Previous behaviour continues the same;
     learner_created: true
+  - name: Stage5.md
+    visible: true
+    learner_created: true
+  - name: content.py
+    visible: true
+    learner_created: true
+  - name: localStorage/docs
+    visible: true
+    learner_created: true
+  - name: localStorage/nytimes
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7214#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Thu, 30 Nov 2023 00:15:16 UTC"
 record: -1

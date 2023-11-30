@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 class Arguments:
@@ -37,6 +38,8 @@ class Startup:
 
         Arguments.local_path = arguments[1]
 
-        if not os.access(Arguments.local_path, os.F_OK):
-            os.makedirs(Arguments.local_path, os.W_OK)
+        if os.access(Arguments.local_path, os.F_OK):
+            shutil.rmtree(Arguments.local_path)
+
+        os.makedirs(Arguments.local_path, os.W_OK)
         return os.access(Arguments.local_path, os.W_OK)
