@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from colorama import Fore
 from dataclasses import dataclass
 from storage import LocalStorage
 import re
@@ -30,8 +31,12 @@ class HtmlToText:
         """
         processor = BeautifulSoup(response.content, 'html.parser')
         result = processor.title.text + '\n'
-        contents = processor.body.text.split('\n')
-        contents = [line.strip() for line in contents if line]
+
+        for tag in processor.find_all('a'):
+            tag.string = f"{Fore.BLUE}{tag.text}{Fore.RESET}"
+
+        contents = processor.find('body').text.split('\n')
+        contents = [line.strip() for line in contents if line and not line.isspace()]
         result += '\n'.join(contents)
         return result
 
